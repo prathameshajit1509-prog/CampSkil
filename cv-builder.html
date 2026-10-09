@@ -51,34 +51,16 @@
         }
     </script>
     <style type="text/tailwindcss">
-        @layer base {
+                @layer base {
             :root {
-                /* LIGHT THEME */
-                --cs-bg: #EAF7F8;
-                --cs-surface: #EAF7F8;
-                --cs-card: #FFFFFF;
-                --cs-elevated: #F8FAFC;
-                --cs-mint: #14A39A;
-                --cs-mint-hover: #0F827B;
-                --cs-text: #1E293B;
-                --cs-text-secondary: #64748B;
-                --cs-border: rgba(20, 163, 154, 0.15);
-                --cs-shadow: 0 4px 20px rgba(0,0,0,0.03);
-                --cs-btn-text: #FFFFFF;
+                --cs-bg: #F0F9FF; --cs-surface: #F0F9FF; --cs-card: #FFFFFF; --cs-elevated: #F8FAFC;
+                --cs-mint: #48B0CA; --cs-mint-hover: #3695AB; --cs-text: #1E293B; --cs-text-secondary: #64748B;
+                --cs-faint: #94A3B8; --cs-border: rgba(14, 165, 233, 0.15); --cs-shadow: 0 4px 20px rgba(0,0,0,0.04);
             }
             .dark {
-                /* DARK THEME */
-                --cs-bg: #0B1214;
-                --cs-surface: #121D1F;
-                --cs-card: #1A2628;
-                --cs-elevated: #223235;
-                --cs-mint: #34D399;
-                --cs-mint-hover: #2AB784;
-                --cs-text: #E6F1EA;
-                --cs-text-secondary: #A7B4B0;
-                --cs-border: #223235;
-                --cs-shadow: 0 4px 20px rgba(0,0,0,0.3);
-                --cs-btn-text: #0B1214;
+                --cs-bg: #0B1113; --cs-surface: #121A1C; --cs-card: #192426; --cs-elevated: #202D30;
+                --cs-mint: #48B0CA; --cs-mint-hover: #58C0D9; --cs-text: #EBF3F5; --cs-text-secondary: #A3B1B4;
+                --cs-faint: #657477; --cs-border: #202D30; --cs-shadow: 0 4px 20px rgba(0,0,0,0.3);
             }
         }
         body { background-color: var(--cs-bg); color: var(--cs-text); }
