@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | CampSkil</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        // Automatic Theme Reader
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark')
+        } else {
+            document.documentElement.classList.remove('dark')
+        }
+
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'], poppins: ['Poppins', 'sans-serif'] },
+                    colors: { 
+                        cs: {
+                            bg: 'var(--cs-bg)', surface: 'var(--cs-surface)', card: 'var(--cs-card)',
+                            elevated: 'var(--cs-elevated)', mint: 'var(--cs-mint)', 'mint-hover': 'var(--cs-mint-hover)',
+                            text: 'var(--cs-text)', muted: 'var(--cs-text-secondary)', faint: 'var(--cs-faint)', border: 'var(--cs-border)'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer base {
+            :root {
+                --cs-bg: #EAF7F8; --cs-surface: #EAF7F8; --cs-card: #FFFFFF; --cs-elevated: #F8FAFC;
+                --cs-mint: #14A39A; --cs-mint-hover: #0F827B; --cs-text: #1E293B; --cs-text-secondary: #64748B;
+                --cs-faint: #94A3B8; --cs-border: rgba(20, 163, 154, 0.15); --cs-shadow: 0 4px 20px rgba(0,0,0,0.03);
+            }
+            .dark {
+                --cs-bg: #0B1214; --cs-surface: #121D1F; --cs-card: #1A2628; --cs-elevated: #223235;
+                --cs-mint: #34D399; --cs-mint-hover: #2AB784; --cs-text: #E6F1EA; --cs-text-secondary: #A7B4B0;
+                --cs-faint: #6B7A78; --cs-border: #223235; --cs-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            }
+        }
+        body { background-color: var(--cs-bg); color: var(--cs-text); }
+        .custom-card { background-color: var(--cs-card); border: 1px solid var(--cs-border); border-radius: 1rem; box-shadow: var(--cs-shadow); }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: var(--cs-border); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--cs-mint); }
+        .logo-white { filter: brightness(0) invert(1); }
+    </style>
+</head>
+<body class="font-sans antialiased h-screen overflow-hidden flex transition-colors duration-300">
+
+    <!-- FIRST TIME ONBOARDING MODAL -->
+    <div id="onboardingModal" class="fixed inset-0 z-50 hidden flex items-center justify-center transition-opacity duration-300 opacity-0">
+        <div class="absolute inset-0 bg-cs-bg/90 backdrop-blur-md"></div>
+        <div class="relative w-full max-w-lg bg-cs-card border border-cs-border rounded-2xl p-8 shadow-2xl transform scale-95 transition-transform duration-300" id="onboardingBox">
+            <div class="text-center mb-6">
+                <div class="w-16 h-16 bg-cs-surface border border-cs-mint/30 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fa-solid fa-rocket text-2xl text-cs-mint"></i>
+                </div>
+                <h2 class="text-2xl font-bold text-cs-text mb-2">Let's tailor your experience.</h2>
+                <p class="text-sm text-cs-muted">Tell us what you're aiming for so we can map the right campus drives and off-campus opportunities to your dashboard.</p>
+            </div>
+
+            <form id="onboardingForm" class="flex flex-col gap-5">
+                <div>
+                    <label class="block text-xs font-bold text-cs-muted uppercase tracking-wider mb-2">Desired Profession</label>
+                    <div class="relative">
+                        <select id="userTargetRole" required class="w-full py-3 px-4 rounded-lg text-sm text-cs-text bg-cs-elevated border border-cs-border focus:outline-none focus:border-cs-mint appearance-none cursor-pointer">
+                            <option value="" disabled selected>Select your target role...</option>
+                            <option value="Software Engineer">Software Engineer</option>
+                            <option value="Data Analyst">Data Analyst</option>
+                            <option value="Frontend Developer">Frontend Developer</option>
+                            <option value="Backend Developer">Backend Developer</option>
+                            <option value="Cloud Architect">Cloud Architect</option>
+                            <option value="Cybersecurity Analyst">Cybersecurity Analyst</option>
+                        </select>
+                        <i class="fa-solid fa-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-cs-faint text-xs pointer-events-none"></i>
+                    </div>
+                </div>
+                
+                <div>
+                    <label class="block text-xs font-bold text-cs-muted uppercase tracking-wider mb-2">Core Skills</label>
+                    <input type="text" id="userCoreSkills" placeholder="e.g. Python, React, SQL, AWS" required class="w-full py-3 px-4 rounded-lg text-sm text-cs-text bg-cs-elevated border border-cs-border focus:outline-none focus:border-cs-mint">
+                    <p class="text-[10px] text-cs-faint mt-1">Separate skills with commas.</p>
+                </div>
+
+                <button type="submit" class="mt-4 w-full bg-cs-mint hover:bg-cs-mint-hover text-[#0B1214] font-bold py-3.5 rounded-lg text-sm transition-all shadow-md flex items-center justify-center gap-2">
+                    Save Profile & Launch <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Sidebar -->
+    <aside class="w-64 bg-cs-surface border-r border-cs-border hidden lg:flex flex-col h-screen relative z-20 shrink-0 transition-colors duration-300">
+        <!-- Logo Area with increased height -->
+        <div class="h-28 flex items-center justify-center p-4 border-b border-cs-border">
+            <img src="LOGO 2.png" alt="CampSkil Logo" class="h-24 w-auto object-contain drop-shadow-sm">
+        </div>
+
+        <div class="flex-1 overflow-y-auto px-4 py-6 custom-scrollbar">
+            <!-- Main Menu -->
+            <p class="text-[11px] font-bold text-cs-faint uppercase tracking-wider mb-4">Main Menu</p>
+            <nav class="flex flex-col gap-2">
+                <a href="#" class="flex items-center gap-3 px-4 py-3 bg-cs-mint/10 text-cs-mint rounded-xl font-medium transition-all">
+                    <i class="fa-solid fa-house w-5 text-center"></i> Overview
+                </a>
+                <a href="#" class="flex items-center gap-3 px-4 py-3 text-cs-muted hover:text-cs-mint hover:bg-cs-mint/5 rounded-xl font-medium transition-all">
+                    <i class="fa-solid fa-briefcase w-5 text-center"></i> Campus Drives
+                </a>
+                <a href="#" class="flex items-center justify-between px-4 py-3 text-cs-muted hover:text-cs-mint hover:bg-cs-mint/5 rounded-xl font-medium transition-all">
+                    <div class="flex items-center gap-3"><i class="fa-solid fa-clipboard-list w-5 text-center"></i> Applications</div>
+                    <span class="text-[10px] font-bold bg-cs-mint/20 text-cs-mint py-0.5 px-2 rounded-full">3</span>
+                </a>
+            </nav>
+
+            <!-- Tools & Off-Campus -->
+            <p class="text-[11px] font-bold text-cs-faint uppercase tracking-wider mt-8 mb-4">Tools</p>
+            <nav class="flex flex-col gap-2">
+                <a href="cv-builder.html" class="flex items-center gap-3 px-4 py-3 text-cs-muted hover:text-cs-mint hover:bg-cs-mint/5 rounded-xl font-medium transition-all">
+                    <i class="fa-solid fa-file-signature w-5 text-center"></i> ATS CV Builder
+                </a>
+                <a href="#" class="flex items-center gap-3 px-4 py-3 text-cs-muted hover:text-cs-mint hover:bg-cs-mint/5 rounded-xl font-medium transition-all">
+                    <i class="fa-solid fa-bullseye w-5 text-center"></i> Skill Mapping
+                </a>
+                
+                <!-- Off-Campus Collapsible Dropdown -->
+                <div>
+                    <button id="offCampusToggle" class="w-full flex items-center justify-between px-4 py-3 text-cs-muted hover:text-cs-mint hover:bg-cs-mint/5 rounded-xl font-medium transition-all focus:outline-none">
+                        <div class="flex items-center gap-3"><i class="fa-solid fa-earth-americas w-5 text-center"></i> Off-Campus</div>
+                        <i id="offCampusChevron" class="fa-solid fa-chevron-down text-[10px] transition-transform duration-300"></i>
+                    </button>
+                    
+                    <div id="offCampusMenu" class="hidden flex-col gap-1 px-4 py-2 mt-1 mx-2 bg-cs-elevated border border-cs-border rounded-lg shadow-inner">
+                        <a href="#" id="linkLinkedin" target="_blank" class="flex items-center gap-3 px-3 py-2 text-xs text-cs-muted hover:text-[#0077b5] hover:bg-cs-bg rounded-md transition-all">
+                            <i class="fa-brands fa-linkedin text-sm"></i> Search LinkedIn
+                        </a>
+                        <a href="#" id="linkNaukri" target="_blank" class="flex items-center gap-3 px-3 py-2 text-xs text-cs-muted hover:text-[#275df5] hover:bg-cs-bg rounded-md transition-all">
+                            <div class="w-3 h-3 rounded bg-current text-cs-surface flex items-center justify-center font-bold text-[8px]">N</div> Naukri.com
+                        </a>
+                        <a href="#" id="linkWellfound" target="_blank" class="flex items-center gap-3 px-3 py-2 text-xs text-cs-muted hover:text-white hover:bg-cs-bg rounded-md transition-all">
+                            <i class="fa-brands fa-angellist text-sm"></i> Startup Jobs
+                        </a>
+                    </div>
+                </div>
+            </nav>
+        </div>
+
+        <div class="p-4 border-t border-cs-border">
+            <button id="logoutBtn" class="flex items-center gap-3 px-4 py-3 w-full text-red-400 hover:text-red-300 hover:bg-red-400/10 rounded-xl font-medium transition-all">
+                <i class="fa-solid fa-right-from-bracket w-5 text-center"></i> Log Out
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 flex flex-col h-screen overflow-hidden bg-cs-bg transition-colors duration-300">
+        
+        <!-- Header -->
+        <header class="h-20 bg-cs-bg/80 backdrop-blur-md border-b border-cs-border flex items-center justify-between px-8 shrink-0 z-10 transition-colors duration-300">
+            <h1 class="font-poppins font-bold text-xl text-cs-text tracking-tight">Dashboard Overview</h1>
+            <div class="flex items-center gap-5">
+                <button onclick="toggleTheme()" class="w-10 h-10 rounded-full bg-cs-surface border border-cs-border flex items-center justify-center text-cs-muted hover:text-cs-mint transition-colors">
+                    <i class="fa-solid fa-moon dark:hidden"></i>
+                    <i class="fa-solid fa-sun hidden dark:block"></i>
+                </button>
+                <div class="relative">
+                    <button class="w-10 h-10 rounded-full bg-cs-surface border border-cs-border flex items-center justify-center text-cs-muted hover:text-cs-mint transition-colors">
+                        <i class="fa-regular fa-bell"></i>
+                    </button>
+                    <div class="absolute top-0 right-0 w-2.5 h-2.5 bg-yellow-400 border-2 border-cs-bg rounded-full"></div>
+                </div>
+                <div class="flex items-center gap-3 pl-5 border-l border-cs-border">
+                    <div class="text-right hidden md:block">
+                        <div id="displayName" class="text-sm font-bold text-cs-text tracking-wide uppercase">STUDENT</div>
+                        <div id="displayRole" class="text-[10px] text-cs-faint font-medium">B.Tech CSE</div>
+                    </div>
+                    <div class="w-10 h-10 rounded-full bg-cs-mint text-[#0B1214] flex items-center justify-center font-bold text-lg shadow-sm border border-cs-mint-hover">
+                        <span id="displayInitial">S</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Scrollable Workspace -->
+        <div class="flex-1 overflow-y-auto p-8 custom-scrollbar relative">
+            <div class="max-w-[1400px] mx-auto flex flex-col gap-6">
+
+                <!-- Welcome Banner -->
+                <div class="custom-card p-8 bg-gradient-to-br from-cs-card to-cs-surface relative overflow-hidden group">
+                    <div class="absolute right-0 top-0 w-[400px] h-full bg-gradient-to-l from-cs-mint/5 to-transparent pointer-events-none"></div>
+                    <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+                        <div class="flex items-center gap-6">
+                            <div class="w-16 h-16 rounded-2xl bg-cs-surface border border-cs-border flex items-center justify-center shadow-inner group-hover:border-cs-mint/50 transition-colors">
+                                <div class="w-8 h-8 rounded-full border-2 border-cs-mint flex items-center justify-center">
+                                    <div class="w-3 h-3 rounded-full bg-cs-mint"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <h2 class="font-poppins font-bold text-3xl text-cs-text mb-2">Welcome back, <span id="welcomeName" class="text-cs-mint">TEST</span>!</h2>
+                                <p class="text-sm text-cs-muted">Placement season is active. You have <strong class="text-cs-text font-semibold">2 pending assessments</strong> and 3 new campus drives matching your profile.</p>
+                            </div>
+                        </div>
+                        <a href="cv-builder.html" class="bg-cs-mint hover:bg-cs-mint-hover text-[#0B1214] font-bold py-3 px-6 rounded-lg text-sm shadow-md transition-transform hover:-translate-y-0.5 whitespace-nowrap">
+                            <i class="fa-solid fa-pen-fancy mr-2"></i> Update CV
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Stats Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="custom-card p-6 flex flex-col justify-between hover:border-cs-mint/50 transition-colors duration-300">
+                        <div class="w-10 h-10 rounded-lg bg-cs-mint/10 text-cs-mint flex items-center justify-center mb-4"><i class="fa-solid fa-paper-plane"></i></div>
+                        <h3 class="text-3xl font-bold text-cs-text mb-1">12</h3>
+                        <p class="text-xs text-cs-muted font-medium">Total Applications</p>
+                    </div>
+                    <div class="custom-card p-6 flex flex-col justify-between hover:border-cs-mint/50 transition-colors duration-300">
+                        <div class="w-10 h-10 rounded-lg bg-cs-mint/10 text-cs-mint flex items-center justify-center mb-4"><i class="fa-solid fa-briefcase"></i></div>
+                        <h3 class="text-3xl font-bold text-cs-text mb-1">3</h3>
+                        <p class="text-xs text-cs-muted font-medium">Shortlisted</p>
+                    </div>
+                    <div class="custom-card p-6 flex flex-col justify-between hover:border-cs-mint/50 transition-colors duration-300">
+                        <div class="w-10 h-10 rounded-lg bg-cs-mint/10 text-cs-mint flex items-center justify-center mb-4"><i class="fa-regular fa-clock"></i></div>
+                        <h3 class="text-3xl font-bold text-cs-text mb-1">2</h3>
+                        <p class="text-xs text-cs-muted font-medium">Pending Tests</p>
+                    </div>
+                    <div class="custom-card p-6 flex flex-col justify-between bg-gradient-to-b from-cs-card to-cs-surface border-cs-mint/30 shadow-[0_0_20px_rgba(52,211,153,0.05)]">
+                        <div class="flex justify-between items-start mb-2">
+                            <div class="w-10 h-10 rounded-lg bg-cs-mint/20 text-cs-mint flex items-center justify-center"><i class="fa-solid fa-chart-line"></i></div>
+                            <span class="text-[10px] font-bold bg-cs-mint/20 text-cs-mint py-1 px-2 rounded-md">+5% This Week</span>
+                        </div>
+                        <h3 class="text-3xl font-bold text-cs-text mb-1">85%</h3>
+                        <p class="text-xs text-cs-muted font-medium mb-3">Profile Match Score</p>
+                        <div class="w-full bg-cs-bg rounded-full h-2 overflow-hidden border border-cs-border">
+                            <div class="bg-cs-mint h-2 rounded-full" style="width: 85%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bottom Grid -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    
+                    <!-- Application Pipeline -->
+                    <div class="lg:col-span-2 custom-card p-0 overflow-hidden flex flex-col">
+                        <div class="p-6 border-b border-cs-border flex justify-between items-center bg-cs-card">
+                            <h3 class="font-poppins font-bold text-cs-text">Application Pipeline</h3>
+                            <button class="text-xs font-semibold text-cs-mint hover:text-cs-mint-hover transition-colors">View All</button>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse">
+                                <thead>
+                                    <tr class="bg-cs-surface/50 border-b border-cs-border text-[10px] uppercase tracking-wider text-cs-faint font-semibold">
+                                        <th class="p-4 pl-6">Company</th>
+                                        <th class="p-4">Role</th>
+                                        <th class="p-4">Date Applied</th>
+                                        <th class="p-4 pr-6 text-right">Current Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="text-sm divide-y divide-cs-border">
+                                    <tr class="hover:bg-cs-surface/30 transition-colors">
+                                        <td class="p-4 pl-6 font-medium text-cs-text flex items-center gap-3">
+                                            <div class="w-8 h-8 rounded bg-white flex items-center justify-center font-bold text-black border border-cs-border">G</div> Google India
+                                        </td>
+                                        <td class="p-4 text-cs-muted">Software Engineer</td>
+                                        <td class="p-4 text-cs-muted">Oct 02, 2026</td>
+                                        <td class="p-4 pr-6 text-right">
+                                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium border border-cs-mint/30 bg-cs-mint/10 text-cs-mint">
+                                                <span class="w-1.5 h-1.5 rounded-full bg-cs-mint"></span> Aptitude Test
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    <tr class="hover:bg-cs-surface/30 transition-colors">
+                                        <td class="p-4 pl-6 font-medium text-cs-text flex items-center gap-3">
+                                            <div class="w-8 h-8 rounded bg-[#00A4EF] flex items-center justify-center text-white border border-cs-border"><i class="fa-brands fa-windows"></i></div> Microsoft
+                                        </td>
+                                        <td class="p-4 text-cs-muted">Data Analyst</td>
+                                        <td class="p-4 text-cs-muted">Sep 28, 2026</td>
+                                        <td class="p-4 pr-6 text-right">
+                                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium border border-cs-mint/30 bg-cs-mint/10 text-cs-mint">
+                                                <span class="w-1.5 h-1.5 rounded-full bg-cs-mint"></span> Tech Interview 1
+                                            </span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- TPO Noticeboard -->
+                    <div class="custom-card p-6 flex flex-col bg-gradient-to-b from-cs-card to-cs-surface border-t-4 border-t-cs-mint">
+                        <div class="flex items-center gap-3 mb-6">
+                            <i class="fa-solid fa-bullhorn text-cs-mint"></i>
+                            <h3 class="font-poppins font-bold text-cs-text">TPO Noticeboard</h3>
+                        </div>
+                        
+                        <div class="flex flex-col gap-4">
+                            <div class="bg-cs-card border-l-4 border-l-cs-mint border border-cs-border rounded-r-lg p-4 shadow-sm hover:shadow-md transition-shadow">
+                                <div class="flex justify-between items-start mb-1">
+                                    <h4 class="text-sm font-bold text-cs-mint">Urgent: Resume Verification</h4>
+                                    <span class="text-[10px] text-cs-faint font-medium">2 hrs ago</span>
+                                </div>
+                                <p class="text-xs text-cs-muted leading-relaxed">All final year CS/IT students must submit their ATS-formatted resumes for dean's approval by EOD Friday.</p>
+                            </div>
+
+                            <div class="bg-cs-card border-l-4 border-l-cs-border border border-cs-border rounded-r-lg p-4 shadow-sm hover:shadow-md transition-shadow">
+                                <div class="flex justify-between items-start mb-1">
+                                    <h4 class="text-sm font-bold text-cs-text">Mock Interviews Scheduled</h4>
+                                    <span class="text-[10px] text-cs-faint font-medium">Yesterday</span>
+                                </div>
+                                <p class="text-xs text-cs-muted leading-relaxed">Alumni network will be conducting technical mock interviews next week. Registration links sent to college email.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // --- THEME TOGGLE ENGINE ---
+        function toggleTheme() {
+            if (document.documentElement.classList.contains('dark')) {
+                document.documentElement.classList.remove('dark');
+                localStorage.theme = 'light';
+            } else {
+                document.documentElement.classList.add('dark');
+                localStorage.theme = 'dark';
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            // Check Session
+            if (localStorage.getItem('cc_session') !== 'active') {
+                window.location.href = 'test.html';
+                return;
+            }
+
+            // Load User Details
+            let role = localStorage.getItem('cc_current_role') || "Student";
+            let details = JSON.parse(localStorage.getItem('cc_display_details')) || {};
+            
+            let displayName = details["Name"] ? details["Name"].split(" ")[0] : role;
+            let displaySub = details["Dept"] ? `B.Tech ${details["Dept"]}` : role;
+            
+            document.getElementById('displayName').textContent = displayName;
+            document.getElementById('welcomeName').textContent = displayName;
+            document.getElementById('displayRole').textContent = displaySub;
+            document.getElementById('displayInitial').textContent = displayName.charAt(0).toUpperCase();
+
+            // Logout Logic
+            document.getElementById('logoutBtn').addEventListener('click', () => {
+                localStorage.removeItem('cc_session');
+                localStorage.removeItem('cc_current_role');
+                localStorage.removeItem('cc_display_details');
+                window.location.href = 'test.html';
+            });
+
+            // --- ONBOARDING & OFF-CAMPUS LOGIC ---
+            const modal = document.getElementById('onboardingModal');
+            const box = document.getElementById('onboardingBox');
+            
+            // Check if user has already completed onboarding
+            if (!localStorage.getItem('cc_onboarding_done')) {
+                modal.classList.remove('hidden');
+                setTimeout(() => {
+                    modal.classList.remove('opacity-0');
+                    box.classList.remove('scale-95');
+                }, 50);
+            } else {
+                generateOffCampusLinks();
+            }
+
+            // Handle Onboarding Form Submit
+            document.getElementById('onboardingForm').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const role = document.getElementById('userTargetRole').value;
+                const skills = document.getElementById('userCoreSkills').value;
+                
+                // Save to local storage
+                localStorage.setItem('cc_target_role', role);
+                localStorage.setItem('cc_target_skills', skills);
+                localStorage.setItem('cc_onboarding_done', 'true');
+                
+                // Hide Modal smoothly
+                modal.classList.add('opacity-0');
+                box.classList.add('scale-95');
+                setTimeout(() => { modal.classList.add('hidden'); }, 300);
+                
+                // Generate links
+                generateOffCampusLinks();
+            });
+
+            // Toggle Sidebar Dropdown
+            const offCampusToggle = document.getElementById('offCampusToggle');
+            const offCampusMenu = document.getElementById('offCampusMenu');
+            const offCampusChevron = document.getElementById('offCampusChevron');
+
+            if (offCampusToggle) {
+                offCampusToggle.addEventListener('click', () => {
+                    offCampusMenu.classList.toggle('hidden');
+                    offCampusMenu.classList.toggle('flex');
+                    offCampusChevron.classList.toggle('rotate-180');
+                });
+            }
+
+            // Function to build Dynamic Deep-Links based on saved role
+            function generateOffCampusLinks() {
+                const targetRole = localStorage.getItem('cc_target_role');
+                if (!targetRole) return;
+                
+                const encodedRole = encodeURIComponent(targetRole);
+                const dashRole = targetRole.toLowerCase().replace(/\s+/g, '-'); 
+
+                document.getElementById('linkLinkedin').href = `https://www.linkedin.com/jobs/search/?keywords=${encodedRole}`;
+                document.getElementById('linkNaukri').href = `https://www.naukri.com/${dashRole}-jobs`;
+                document.getElementById('linkWellfound').href = `https://wellfound.com/role/${dashRole}`;
+            }
+        });
+    </script>
+</body>
+</html>
