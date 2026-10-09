@@ -82,28 +82,28 @@
 </head>
 <body class="font-sans antialiased min-h-screen flex flex-col h-screen overflow-hidden transition-colors duration-300">
 
-    <header class="h-16 bg-cs-surface border-b border-cs-border flex items-center px-6 shrink-0 z-20 justify-between transition-colors duration-300">
+    <header class="h-16 bg-cs-surface border-b border-cs-border flex items-center px-4 lg:px-6 shrink-0 z-20 justify-between transition-colors duration-300">
         <a href="dashboard.html" class="flex items-center gap-2 text-cs-muted hover:text-cs-mint transition-colors text-sm font-medium">
-            <i class="fa-solid fa-arrow-left"></i> Back to Dashboard
+            <i class="fa-solid fa-arrow-left"></i> <span class="hidden sm:inline">Back to Dashboard</span>
         </a>
         <div class="flex items-center gap-2">
             <i class="fa-solid fa-file-signature text-cs-mint"></i>
-            <span class="font-poppins font-semibold text-lg tracking-tight text-cs-text">Advanced CV Builder</span>
+            <span class="font-poppins font-semibold text-base sm:text-lg tracking-tight text-cs-text">Advanced CV Builder</span>
         </div>
         <button type="button" id="downloadPdfBtn" class="bg-cs-mint hover:bg-cs-mint-hover text-cs-btntext font-semibold py-2 px-4 rounded-lg text-sm transition-all shadow-md flex items-center gap-2">
-            <i class="fa-solid fa-download"></i> Download PDF
+            <i class="fa-solid fa-download"></i> <span class="hidden sm:inline">Download PDF</span>
         </button>
     </header>
 
-    <main class="flex-1 flex overflow-hidden">
+    <main class="flex-1 flex flex-col lg:flex-row overflow-hidden">
         
-        <div class="w-full lg:w-[45%] p-6 lg:p-8 overflow-y-auto border-r border-cs-border pb-32 transition-colors duration-300">
+        <div class="w-full lg:w-[45%] p-4 lg:p-6 lg:p-8 overflow-y-auto border-r border-cs-border pb-32 transition-colors duration-300">
             <div class="max-w-xl mx-auto">
                 <h2 class="text-2xl font-poppins font-bold mb-2 text-cs-text">Profile Details</h2>
                 <p class="text-cs-muted text-sm mb-6">Fill in your information to generate an executive-style template.</p>
                 
                 <div id="smartWarning" class="hidden mb-6 bg-red-500/10 border border-red-500/30 text-red-500 text-xs py-3 px-4 rounded-lg flex items-start gap-3 transition-all">
-                    <i class="fa-solid fa-triangle-exclamation mt-0.5 text-lg"></i>
+                    <i class="fa-solid fa-triangle-exclamation mt-0.5 text-base sm:text-lg"></i>
                     <div>
                         <p class="font-bold uppercase tracking-wider mb-0.5">Unprofessional Content Detected</p>
                         <p>Please ensure your text uses professional terminology, avoids excessive length, and does not contain random characters.</p>
@@ -200,7 +200,7 @@
                         <div class="w-[35%] border-r-[1.5px] border-slate-400 pt-8 pb-12 pl-12 pr-6 flex flex-col gap-8">
                             
                             <div>
-                                <h2 class="font-serif text-lg font-bold text-slate-800 uppercase tracking-widest mb-3">Contact</h2>
+                                <h2 class="font-serif text-base sm:text-lg font-bold text-slate-800 uppercase tracking-widest mb-3">Contact</h2>
                                 <div class="text-[14px] text-slate-700 leading-relaxed flex flex-col gap-1">
                                     <span id="outPhone">(555) 123-1234</span>
                                     <span id="outLocation">Charleston, SC 98765</span>
@@ -210,19 +210,19 @@
                             </div>
 
                             <div>
-                                <h2 class="font-serif text-lg font-bold text-slate-800 uppercase tracking-widest mb-3">Education</h2>
+                                <h2 class="font-serif text-base sm:text-lg font-bold text-slate-800 uppercase tracking-widest mb-3">Education</h2>
                                 <div id="outDegree" class="text-[14px] font-bold text-slate-800 uppercase leading-snug mb-2">BACHELOR OF BUSINESS ADMINISTRATION</div>
                                 <div id="outCollege" class="text-[14px] text-slate-700">Roanoke College, Roanoke, VA</div>
                             </div>
 
                             <div>
-                                <h2 class="font-serif text-lg font-bold text-slate-800 uppercase tracking-widest mb-3">Certification</h2>
+                                <h2 class="font-serif text-base sm:text-lg font-bold text-slate-800 uppercase tracking-widest mb-3">Certification</h2>
                                 <div id="outCertTitle" class="text-[14px] font-bold text-slate-800 uppercase leading-snug mb-1">PROJECT MANAGEMENT PROFESSIONAL</div>
                                 <div id="outCertOrg" class="text-[14px] text-slate-700">Project Management Institute</div>
                             </div>
 
                             <div>
-                                <h2 class="font-serif text-lg font-bold text-slate-800 uppercase tracking-widest mb-3">Key Skills</h2>
+                                <h2 class="font-serif text-base sm:text-lg font-bold text-slate-800 uppercase tracking-widest mb-3">Key Skills</h2>
                                 <p id="outSkills" class="text-[14px] text-slate-700 leading-loose">
                                     Business Needs Assessment | Complex Problem-Solving | Conflict Resolution | Cost Reduction & Elimination | Data Gathering & Analysis
                                 </p>
